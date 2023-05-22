@@ -11,7 +11,7 @@ class Restaurant(AbstractKitchen):
     max_capacity = None
     current_capacity = None
 
-    def __init__(self, capacity=0, size=0, name="", rating=0, max_capacity=0, current_capacity=0):
+    def __init__(self, name="", capacity=0, size=0,  rating=0, max_capacity=0, current_capacity=0):
         """
         :param name - set the name of the restaurant
         :param capacity - set the current capacity of guests
