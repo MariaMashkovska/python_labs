@@ -7,9 +7,6 @@ class Pub(AbstractKitchen):
     """
     Class creates pubs, add guests and choose the type of kitchen
     """
-    year_of_foundation = None
-    type_of_drinks = None
-    max_capacity_of_guests = None
 
     def __init__(self, name="", capacity=0, size=0, max_capacity_of_guests=0, year_of_foundation=0,
                  type_of_drinks="nothing"):

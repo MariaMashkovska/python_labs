@@ -1,7 +1,7 @@
-from classes.home_kitchen import HomeKitchen
-from classes.pizzeria import Pizzeria
-from classes.pub import Pub
-from classes.restaurant import Restaurant
+from models.home_kitchen import HomeKitchen
+from models.pizzeria import Pizzeria
+from models.pub import Pub
+from models.restaurant import Restaurant
 
 
 class KitchenManager:

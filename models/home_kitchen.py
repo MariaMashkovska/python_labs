@@ -5,8 +5,6 @@ class HomeKitchen(AbstractKitchen):
     """
     Class creates home kitchens, add guests and choose the type of kitchen
     """
-    type_of_plate = None
-    name_of_hood = None
 
     def __init__(self, name="", capacity=0, size=0, type_of_plate=0, name_of_hood=0):
         """

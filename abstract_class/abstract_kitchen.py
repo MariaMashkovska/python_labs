@@ -5,9 +5,6 @@ class AbstractKitchen(ABC):
     """
     A parent abstract class which have two methods: adding guests and defining kitchen type
     """
-    __name = None
-    __capacity = None
-    __size = None
 
     kitchen_types = ["ukrainian", "polish", "american", "japanese"]
 

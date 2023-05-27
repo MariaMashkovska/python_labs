@@ -7,9 +7,6 @@ class Restaurant(AbstractKitchen):
     """
     Class creates restaurants, accept, remove reservation, add guests and choose the type of kitchen
     """
-    rating = None
-    max_capacity = None
-    current_capacity = None
 
     def __init__(self, name="", capacity=0, size=0,  rating=0, max_capacity=0, current_capacity=0):
         """
