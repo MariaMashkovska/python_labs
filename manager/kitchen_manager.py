@@ -10,7 +10,6 @@ def write_attribs_in_file(func):
     """
     Write in file function name, arguments and their values
     """
-
     def wrapper(self, *args, **kwargs):
         with open("results.txt", "w") as file:
             parameter_names = list(inspect.signature(func).parameters.keys())
@@ -19,11 +18,15 @@ def write_attribs_in_file(func):
             for key, value in kwargs.items():
                 file.write(f"{func.__name__}: {key}={value}\n")
         return func(self, *args, **kwargs)
-
     return wrapper
 
 
 def limit_of_cals(func):
+    """
+    Count calls of function , if it more than 2 throw exception
+    :param func:
+    :return:
+    """
     def wrapper(*args, **kwargs):
         if wrapper.counter <= 3:
             wrapper.counter += 1
@@ -148,13 +151,18 @@ class SetManager:
 
 manager = KitchenManager()
 manager.add_kitchen(Restaurant("Kafe-bar Oksana", 10, 23, 2, 5, 6))
-manager.add_kitchen(Restaurant("Kafe-bar Yaryna", 34, 25, 16, 123, 5))
+
+manager.add_kitchen(Pub("Kolya Kolya", 50, 51, 50, 321))
+
+manager.add_kitchen(Pizzeria("Freddy Fazbear`s", 33, 1223, 312, 31, 31, 122))
+
+manager.add_kitchen(HomeKitchen("Not home", 33, 4, "Electrical", "Wink"))
 
 print(manager.type_of_kitchens())
 print(manager.enumerate_concatenation())
 print(manager.zip_concatenation())
 print(manager.kitchens[0].get_attribs_by_type(str))  # absract_kitchen.py
-print(manager.rating_check(4))  # Як я зрозумів, назва методу і сама умова може бути яка захочеш, тому я вибрав таке, всі інше по методичці
+print(manager.rating_check(4))
 
 set_manager = SetManager(manager)
 print(set_manager.all_chefs)
@@ -162,41 +170,3 @@ print(len(set_manager))
 for i in set_manager:
     print(i)
 print(set_manager[0])
-
-# manager.add_kitchen(Pub("Kolya Kolya", 50, 51, 50, 321))
-# manager.add_kitchen(Pub("Alibi", 656, 100, 12, 7443))
-#
-# manager.add_kitchen(Pizzeria("Freddy Fazbear`s", 33, 1223, 312, 31, 31, 122))
-# manager.add_kitchen(Pizzeria("Chelentano", 33, 4, 743, 71, 1, 4))
-#
-# manager.add_kitchen(HomeKitchen("Home", 33, 4, "Gas", "Wink"))
-# manager.add_kitchen(HomeKitchen("Not home", 33, 4, "Electrical", "Wink"))
-#
-# for kitchen in manager.kitchens:
-#     print(kitchen)
-#     print(kitchen.kitchen_type())
-#
-# print("\nAll objects bigger than given size: ")
-# bigger_size = manager.find_bigger_than(50)
-# for kitchen in bigger_size:
-#     print(kitchen)
-#
-# print("\nAll objects with bigger capacity than given capacity: ")
-# bigger_capacity = manager.find_bigger_capacity_than(100)
-# for kitchen in bigger_capacity:
-#     print(kitchen)
-#
-# print("\nConcatenation of each kitchen object and its index:")
-# print(manager.enumerate_concatenation())
-#
-# print("\nConcatenation of each kitchen object and the result of the do_something() method:")
-# print(manager.zip_concatenation())
-#
-# print("\nAttributes of the objects with value type int:")
-# print(manager.attribute_dict(int))
-#
-# print("\nCheck if all objects satisfy the condition:")
-# print(manager.all_any_check(lambda kitch: kitchen.size > 10))
-#
-# print("\nCheck if any object satisfies the condition:")
-# print(manager.all_any_check(lambda kitch: kitchen.capacity > 300))
