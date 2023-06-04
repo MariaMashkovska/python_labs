@@ -1,41 +1,6 @@
-from models.home_kitchen import HomeKitchen
-from models.pizzeria import Pizzeria
-from models.pub import Pub
+from manager.decorators import write_attribs_in_file, limit_of_cals
+from manager.set_manager import SetManager
 from models.restaurant import Restaurant
-
-import inspect
-
-
-def write_attribs_in_file(func):
-    """
-    Write in file function name, arguments and their values
-    """
-    def wrapper(self, *args, **kwargs):
-        with open("results.txt", "w") as file:
-            parameter_names = list(inspect.signature(func).parameters.keys())
-            for index, argument in enumerate(args, 1):
-                file.write(f"{func.__name__}:{parameter_names[index]}={argument}\n")
-            for key, value in kwargs.items():
-                file.write(f"{func.__name__}: {key}={value}\n")
-        return func(self, *args, **kwargs)
-    return wrapper
-
-
-def limit_of_cals(func):
-    """
-    Count calls of function , if it more than 2 throw exception
-    :param func:
-    :return:
-    """
-    def wrapper(*args, **kwargs):
-        if wrapper.counter <= 3:
-            wrapper.counter += 1
-            return func(*args, **kwargs)
-        else:
-            raise Exception(f"Method '{func.__name__}' has reached the call limit of 3")
-
-    wrapper.counter = 0
-    return wrapper
 
 
 class KitchenManager:
@@ -93,7 +58,7 @@ class KitchenManager:
     @limit_of_cals
     def type_of_kitchens(self):
         """
-        :return: Type of kitchen for every kitchen
+        :return: random type of kitchen for every kitchen
         """
         return [kitchen.kitchen_type() for kitchen in self.kitchens]  # TODO check kitchen_type(), why random?
 
@@ -123,46 +88,14 @@ class KitchenManager:
             "any": any(result)}
 
 
-class SetManager:
-    """
-    Class to work with chefs inside every kitchen
-    """
-    all_chefs = []
-
-    def __init__(self, regular_manager):
-        """
-        Put chefs from all kitchens in one list
-        :param regular_manager: object type Manager
-        """
-        self.all_chefs = [chef for kitchen in regular_manager.kitchens for chef in kitchen]
-
-    def __getitem__(self, item):
-        return self.all_chefs[item]
-
-    def __iter__(self):
-        return iter(self.all_chefs)
-
-    def __len__(self):
-        return len(self.all_chefs)
-
-    def __next__(self):
-        return next(self.__iter__())
-
-
 manager = KitchenManager()
 manager.add_kitchen(Restaurant("Kafe-bar Oksana", 10, 23, 2, 5, 6))
-
-manager.add_kitchen(Pub("Kolya Kolya", 50, 51, 50, 321))
-
-manager.add_kitchen(Pizzeria("Freddy Fazbear`s", 33, 1223, 312, 31, 31, 122))
-
-manager.add_kitchen(HomeKitchen("Not home", 33, 4, "Electrical", "Wink"))
+manager.add_kitchen(Restaurant("Kafe-bar Yaryna", 34, 25, 16, 123, 5))
 
 print(manager.type_of_kitchens())
 print(manager.enumerate_concatenation())
 print(manager.zip_concatenation())
-print(manager.kitchens[0].get_attribs_by_type(str))  # absract_kitchen.py
-print(manager.rating_check(4))
+print(manager.kitchens[0].get_attribs_by_type(str))
 
 set_manager = SetManager(manager)
 print(set_manager.all_chefs)
@@ -170,3 +103,4 @@ print(len(set_manager))
 for i in set_manager:
     print(i)
 print(set_manager[0])
+

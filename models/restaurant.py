@@ -56,9 +56,17 @@ class Restaurant(AbstractKitchen):
 
         return "There is no place"
 
-    def __str__(self):
+    def __repr__(self):
         """Method prints an object"""
-        return f"Restaurant name='{self.name}'," \
+        return f"Restaurant name='{self.name}', " \
+               f"capacity={self.capacity}, " \
+               f"size={self.size}, " \
+               f"rating={self.rating}, " \
+               f"max_capacity={self.max_capacity}, " \
+               f"current_capacity={self.current_capacity}"
+
+    def __str__(self):
+        return f"Restaurant name='{self.name}', " \
                f"capacity={self.capacity}, " \
                f"size={self.size}, " \
                f"rating={self.rating}, " \
