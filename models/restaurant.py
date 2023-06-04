@@ -18,8 +18,7 @@ class Restaurant(AbstractKitchen):
         :param max_capacity - define max capacity to accept reservation
         :param current_capacity - define current capacity of guests
         """
-        super().__init__(name, capacity, size)
-        self.rating = rating
+        super().__init__(name, capacity, size, rating)
         self.max_capacity = max_capacity
         self.current_capacity = current_capacity
 
