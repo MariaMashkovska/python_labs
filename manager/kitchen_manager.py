@@ -105,7 +105,7 @@ print(manager.type_of_kitchens())
 print(manager.enumerate_concatenation())
 print(manager.zip_concatenation())
 print(manager.kitchens[0].get_attribs_by_type(str))
-print(manager.rating_check(40))
+print(manager.rating_check(10))
 
 set_manager = SetManager(manager)
 print(set_manager.all_chefs)

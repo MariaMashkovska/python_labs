@@ -1,1 +1,1 @@
-rating_check:minimal_rating=4
+wrapper:kwargs=10

@@ -35,44 +35,29 @@ def limit_of_cals(func):
     return wrapper
 
 
-def logged(exception, mode):
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
+def rating_validator(exception, mode):
+    def decorator(method):
+        logger = logging.getLogger(__name__)
+        logger.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
-    if mode == "console":
-        handler = logging.StreamHandler()
-    elif mode == "file":
-        handler = logging.FileHandler("log.txt")
-    else:
-        raise ValueError("Invalid mode. Mode should be 'console' or 'file'.")
-    logger.addHandler(handler)
+        if mode == "file":
+            file_handler = logging.FileHandler('rating_errors.log')
+            file_handler.setFormatter(formatter)
+            logger.addHandler(file_handler)
+        elif mode == "console":
+            console_handler = logging.StreamHandler()
+            console_handler.setFormatter(formatter)
+            logger.addHandler(console_handler)
 
-    def decorator(func):
-        def wrapper(self, *args, **kwargs):
-            try:
-                # Access fields of the abstract class
-                cls = self.__class__
-                attributes = inspect.getmembers(cls, lambda a: not inspect.isroutine(a))
-                attribute_names = [name for name, _ in attributes]
+        def wrapper(self, minimal_rating):
+            if minimal_rating >= 10:
+                logger.error("Rating overflow: %s", minimal_rating)
+                raise exception("Rating overflow occurred. Minimal rating argument can not be more than 10.")
+            if minimal_rating < 0:
+                logger.error("Rating cannot be under 0")
 
-                # Log the attributes
-                logger.info(f"{cls.__name__} attributes: {', '.join(attribute_names)}")
-
-                return func(self, *args, **kwargs)
-            except exception as e:
-                logger.exception(f"Exception occurred in {func.__name__}: {str(e)}")
-                raise
+            return method(self, minimal_rating)
 
         return wrapper
-
     return decorator
-
-
-def rating_validator(func, mode):
-    def wrapper(self, *args, **kwargs):
-        for kitchen in self.kitchens:
-            if kitchen.rating > 10:
-                raise Exception("Rating cannot be more than 10.")
-        return func(self, *args, **kwargs)
-
-    return wrapper
