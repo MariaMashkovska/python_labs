@@ -8,7 +8,7 @@ class AbstractKitchen(ABC):
     chefs = set()
     kitchen_types = ["ukrainian", "polish", "american", "japanese"]
 
-    def __init__(self, name, capacity, size):
+    def __init__(self, name, capacity, size, rating):
         """
         :param name: set the name of place
         :param capacity: set the capacity of guests inside
@@ -17,6 +17,7 @@ class AbstractKitchen(ABC):
         self.name = name
         self.capacity = capacity
         self.size = size
+        self.rating = rating
 
     def __iter__(self):
         return iter(self.chefs)

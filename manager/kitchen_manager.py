@@ -1,6 +1,11 @@
-from manager.decorators import write_attribs_in_file, limit_of_cals
+from manager.decorators import write_attribs_in_file, limit_of_cals, rating_validator
 from manager.set_manager import SetManager
+from models.pizzeria import Pizzeria
 from models.restaurant import Restaurant
+
+
+class RatingOverflowError(Exception):
+    pass
 
 
 class KitchenManager:
@@ -76,8 +81,9 @@ class KitchenManager:
         """
         return list(zip(self.kitchens, self.type_of_kitchens()))
 
-    @limit_of_cals
     @write_attribs_in_file
+    @limit_of_cals
+    @rating_validator(RatingOverflowError, mode="сonsole")
     def rating_check(self, minimal_rating):
         """
         Checks if all objects in the manager satisfy the given condition
@@ -90,12 +96,16 @@ class KitchenManager:
 
 manager = KitchenManager()
 manager.add_kitchen(Restaurant("Kafe-bar Oksana", 10, 23, 2, 5, 6))
-manager.add_kitchen(Restaurant("Kafe-bar Yaryna", 34, 25, 16, 123, 5))
+manager.add_kitchen(Restaurant("Kafe-bar Yaryna", 34, 25, 5, 123, 5))
+
+manager.add_kitchen(Pizzeria("Freddy Fazbear`s", 33, 1223, 8, 31, 31, 122))
+manager.add_kitchen(Pizzeria("Chelentano", 33, 4, 1, 71, 1, 4))
 
 print(manager.type_of_kitchens())
 print(manager.enumerate_concatenation())
 print(manager.zip_concatenation())
 print(manager.kitchens[0].get_attribs_by_type(str))
+print(manager.rating_check(10))
 
 set_manager = SetManager(manager)
 print(set_manager.all_chefs)
@@ -103,4 +113,3 @@ print(len(set_manager))
 for i in set_manager:
     print(i)
 print(set_manager[0])
-
