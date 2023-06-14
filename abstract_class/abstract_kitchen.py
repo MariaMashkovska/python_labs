@@ -5,7 +5,7 @@ class AbstractKitchen(ABC):
     """
     A parent abstract class which have two methods: adding guests and defining kitchen type
     """
-
+    chefs = set()
     kitchen_types = ["ukrainian", "polish", "american", "japanese"]
 
     def __init__(self, name, capacity, size):
@@ -17,6 +17,17 @@ class AbstractKitchen(ABC):
         self.name = name
         self.capacity = capacity
         self.size = size
+
+    def __iter__(self):
+        return iter(self.chefs)
+
+    def get_attribs_by_type(self, type_of_attrib):
+        """
+        Return attributes filtered by type of its value
+        :param type_of_attrib: Type of attributes
+        :return: Dictionary with filtered attributes names and their values
+        """
+        return {attrib: value for attrib, value in self.__dict__.items() if type(value) == type_of_attrib}
 
     @abstractmethod
     def add_guests(self, guests):

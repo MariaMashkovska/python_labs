@@ -1,5 +1,4 @@
 import random
-
 from abstract_class.abstract_kitchen import AbstractKitchen
 
 
@@ -8,7 +7,9 @@ class Restaurant(AbstractKitchen):
     Class creates restaurants, accept, remove reservation, add guests and choose the type of kitchen
     """
 
-    def __init__(self, name="", capacity=0, size=0,  rating=0, max_capacity=0, current_capacity=0):
+    chefs = {"Gats", "Griffit"}  # TODO need this fields for every model
+
+    def __init__(self, name="", capacity=0, size=0, rating=0, max_capacity=0, current_capacity=0):
         """
         :param name - set the name of the restaurant
         :param capacity - set the current capacity of guests
@@ -55,9 +56,17 @@ class Restaurant(AbstractKitchen):
 
         return "There is no place"
 
-    def __str__(self):
+    def __repr__(self):
         """Method prints an object"""
-        return f"Restaurant name='{self.name}'," \
+        return f"Restaurant name='{self.name}', " \
+               f"capacity={self.capacity}, " \
+               f"size={self.size}, " \
+               f"rating={self.rating}, " \
+               f"max_capacity={self.max_capacity}, " \
+               f"current_capacity={self.current_capacity}"
+
+    def __str__(self):
+        return f"Restaurant name='{self.name}', " \
                f"capacity={self.capacity}, " \
                f"size={self.size}, " \
                f"rating={self.rating}, " \

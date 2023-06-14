@@ -1,6 +1,5 @@
-from models.home_kitchen import HomeKitchen
-from models.pizzeria import Pizzeria
-from models.pub import Pub
+from manager.decorators import write_attribs_in_file, limit_of_cals
+from manager.set_manager import SetManager
 from models.restaurant import Restaurant
 
 
@@ -11,6 +10,7 @@ class KitchenManager:
     """
     kitchens = []
 
+    @write_attribs_in_file
     def add_kitchen(self, kitchen):
         """
         Method which adds kitchens to array
@@ -19,6 +19,7 @@ class KitchenManager:
         """
         self.kitchens.append(kitchen)
 
+    @write_attribs_in_file
     def find_bigger_than(self, size):
         """
         Method finds all objects bigger than given size
@@ -27,6 +28,7 @@ class KitchenManager:
         """
         return list(filter(lambda kitchen: kitchen.size > size, self.kitchens))
 
+    @write_attribs_in_file
     def find_bigger_capacity_than(self, capacity):
         """
         Method finds all objects with bigger capacity than given size
@@ -35,39 +37,70 @@ class KitchenManager:
         """
         return list(filter(lambda kitchen: kitchen.capacity > capacity, self.kitchens))
 
-    @staticmethod
-    def main():
-
+    def __len__(self):
         """
-        A main function which adds objects to array and then prints it in different ways
+        Returns the number of kitchens in the manager
         """
+        return len(self.kitchens)
 
-        manager = KitchenManager()
-        manager.add_kitchen(Restaurant("Kafe-bar Oksana", 10, 23, 20, 5, 6))
-        manager.add_kitchen(Restaurant("Kafe-bar Yaryna", 34, 25, 16, 123, 5))
+    def __getitem__(self, index):
+        """
+        Returns the kitchen at the specified index
+        """
+        return self.kitchens[index]
 
-        manager.add_kitchen(Pub("Kolya Kolya", 50, 51, 50, 321))
-        manager.add_kitchen(Pub("Alibi", 656, 100, 12, 7443))
+    def __iter__(self):
+        """
+        Returns an iterator over the kitchens in the manager
+        """
+        return iter(self.kitchens)
 
-        manager.add_kitchen(Pizzeria("Freddy Fazbear`s", 33, 1223, 312, 31, 31, 122))
-        manager.add_kitchen(Pizzeria("Chelentano", 33, 4, 743, 71, 1, 4))
+    @limit_of_cals
+    def type_of_kitchens(self):
+        """
+        :return: random type of kitchen for every kitchen
+        """
+        return [kitchen.kitchen_type() for kitchen in self.kitchens]  # TODO check kitchen_type(), why random?
 
-        manager.add_kitchen(HomeKitchen("Home", 33, 4, "Gas", "Wink"))
-        manager.add_kitchen(HomeKitchen("Not home", 33, 4, "Electrical", "Wink"))
+    @limit_of_cals
+    def enumerate_concatenation(self):
+        """
+        Returns a concatenation of each kitchen object and its index in the manager
+        """
+        return list(enumerate(self.kitchens))
 
-        for kitchen in manager.kitchens:
-            print(kitchen)
-            print(kitchen.kitchen_type())
+    @limit_of_cals
+    def zip_concatenation(self):
+        """
+        Returns a concatenation of each kitchen object and the result of the kitchen_type() method
+        """
+        return list(zip(self.kitchens, self.type_of_kitchens()))
 
-        print("All objects bigger than given size: ")
-        bigger_size = manager.find_bigger_than(50)
-        for kitchen in bigger_size:
-            print(kitchen)
+    @limit_of_cals
+    @write_attribs_in_file
+    def rating_check(self, minimal_rating):
+        """
+        Checks if all objects in the manager satisfy the given condition
+        """
+        result = [kitchen.rating > minimal_rating for kitchen in self.kitchens]
+        return {
+            "all": all(result),
+            "any": any(result)}
 
-        print("All objects with bigger capacity than given capacity: ")
-        bigger_capacity = manager.find_bigger_capacity_than(100)
-        for kitchen in bigger_capacity:
-            print(kitchen)
 
+manager = KitchenManager()
+manager.add_kitchen(Restaurant("Kafe-bar Oksana", 10, 23, 2, 5, 6))
+manager.add_kitchen(Restaurant("Kafe-bar Yaryna", 34, 25, 16, 123, 5))
 
-KitchenManager.main()
+print(manager.type_of_kitchens())
+print(manager.enumerate_concatenation())
+print(manager.zip_concatenation())
+print(manager.kitchens[0].get_attribs_by_type(str))
+
+set_manager = SetManager(manager)
+print(set_manager.all_chefs)
+print(len(set_manager))
+for i in set_manager:
+    print(i)
+print(set_manager[0])
+
